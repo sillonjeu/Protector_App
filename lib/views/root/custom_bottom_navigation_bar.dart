@@ -30,22 +30,17 @@ class CustomBottomNavigationBar extends BaseWidget<RootViewModel> {
                     _buildBottomNavigationBarItem(
                       index: 0,
                       size: 45,
-                      svgPath: 'assets/icons/meet_h.svg',
+                      svgPath: 'assets/icons/house.svg',
                     ),
                     _buildBottomNavigationBarItem(
                       index: 1,
                       size: 45,
-                      svgPath: 'assets/icons/chat_h.svg',
+                      svgPath: 'assets/icons/telemedicine.svg',
                     ),
                     _buildBottomNavigationBarItem(
                       index: 2,
                       size: 45,
-                      svgPath: 'assets/icons/like_h.svg',
-                    ),
-                    _buildBottomNavigationBarItem(
-                      index: 3,
-                      size: 45,
-                      svgPath: 'assets/icons/my_h.svg',
+                      svgPath: 'assets/icons/doctor.svg',
                     ),
                   ],
                 ),
@@ -87,8 +82,6 @@ class CustomBottomNavigationBar extends BaseWidget<RootViewModel> {
         )
             : Container(),
       );
-
-
 }
 
 

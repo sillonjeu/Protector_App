@@ -32,7 +32,6 @@ abstract class BaseScreen<T extends GetxController> extends GetView<T> {
           : _buildScaffold(context),
     );
   }
-
   // Scaffold를 구성하는 메서드
   Widget _buildScaffold(BuildContext context) {
     return Scaffold(

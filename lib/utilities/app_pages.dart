@@ -4,9 +4,9 @@ import '../views/root/root_screen.dart';
 import 'app_routes.dart';
 
 List<GetPage> appPages = [
-  // GetPage(
-  //   name: Routes.ROOT,
-  //   page: () => const RootScreen(),
-  //   binding: RootBinding(),
-  // ),
+  GetPage(
+    name: Routes.ROOT,
+    page: () => const RootScreen(),
+    binding: RootBinding(),
+  ),
 ];
