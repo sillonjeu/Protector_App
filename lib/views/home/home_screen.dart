@@ -34,20 +34,11 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               child: _buildCodeCard(context),
             ),
             Obx(() {
-              // Null 체크 추가
               var drugDoseList = viewModel.summary.value.drugDoseList;
               if (drugDoseList == null || drugDoseList.isEmpty) {
                 return _ifAlarmIsEmpty(context);
               }
-              return ListView.builder(
-                shrinkWrap: true, // Column 내부에서 ListView 사용시 필요
-                physics: NeverScrollableScrollPhysics(), // 내부 ListView 스크롤 방지
-                itemCount: drugDoseList.length,
-                itemBuilder: (context, index) {
-                  final drugDose = drugDoseList[index];
-                  return _buildReminderCard(context, drugDose);
-                },
-              );
+              return _buildHorizontalListView(context, drugDoseList);
             }),
           ],
         ),
@@ -143,57 +134,72 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
-  Widget _buildReminderCard(BuildContext context, DrugDose drugDose) {
-    return Dismissible(
-      key: Key(drugDose.drugCode), // 고유한 key를 약 코드로 설정
-      background: Container(color: Colors.red),
-      onDismissed: (direction) {
-        // 알람을 삭제하는 등의 동작을 구현
-        // viewModel.removeAlarm(drugDose.drugCode); 가 호출되어야 함
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-        ),
-        padding: EdgeInsets.all(16),
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Text(drugDose.drugName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                ),
-                SvgPicture.asset('assets/icons/medicine.svg'), // SVG 이미지 사용
-              ],
-            ),
-            SizedBox(height: 8),
-            Text(
-              // Todo: 연동
-              '08: 00', // drugDose.alarmTime,
-              style: TextStyle(color: Colors.blue, fontSize: 40),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('처방 시간: ${drugDose.durationDay} 일', style: TextStyle(fontSize: 12)),
-                Checkbox(
-                  value: drugDose.alarm, // 알람 설정 여부
-                  onChanged: (bool? value) {
-                    // 여기서 알람 설정을 토글하는 함수를 호출해야 함
-                    // 예: viewModel.toggleAlarm(drugDose.drugCode);
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+  Widget _buildHorizontalListView(BuildContext context, List<DrugDose> drugDoseList) {
+    return Container(
+      height: 200, // 수평 스크롤 뷰의 적절한 높이 설정, 카드와 패딩을 고려하여 조정
+      child: PageView.builder(
+        controller: PageController(viewportFraction: 0.95), // viewportFraction은 한 번에 보이는 페이지의 비율입니다.
+        itemCount: drugDoseList.length,
+        itemBuilder: (context, index) {
+          final drugDose = drugDoseList[index];
+          return _buildReminderCard(context, drugDose);
+        },
       ),
     );
   }
 
+  Widget _buildReminderCard(BuildContext context, DrugDose drugDose) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 40, // 너비 설정
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 카드 간 간격 및 정렬을 위한 마진
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+      ),
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Text(drugDose.drugName, style: FontSystem.KR16B.copyWith(color: Colors.black)),
+              ),
+              SvgPicture.asset('assets/icons/medicine.svg', width: 24, height: 24),
+            ],
+          ),
+          SizedBox(height: 8),
+          Center( // 중앙 정렬을 위해 Center 위젯 사용
+            child: ShaderMask(
+              shaderCallback: (bounds) => LinearGradient(
+                colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ).createShader(bounds),
+              child: Text(
+                '08:00', // 알람 시간, 연동 필요
+                style: FontSystem.KR40B.copyWith(color: Colors.white),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Checkbox(
+                value: drugDose.alarm, // 알람 설정 여부
+                onChanged: (bool? value) {
+                  // 알람 설정을 토글하는 함수 호출
+                  // 예: viewModel.toggleAlarm(drugDose.drugCode);
+                },
+              ),
+              Text('처방 시간: ${drugDose.durationDay}일 전 ', style: FontSystem.KR15R.copyWith(color: Color(0xFF949BA7))),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   bool get wrapWithOuterSafeArea => true;

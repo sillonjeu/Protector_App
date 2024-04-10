@@ -32,7 +32,7 @@ class HomeViewModel extends GetxController {
         patientName: PatientName(name: 'John Doe'),
         metricSummary: [],
       );
-      // summary.value = fetchedSummary;
+      summary.value = fetchedSummary;
     } catch (e) {
       // 에러 처리
       Get.snackbar('Error', 'Failed to fetch data');
