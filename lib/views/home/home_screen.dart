@@ -151,7 +151,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
   Widget _buildReminderCard(BuildContext context, DrugDose drugDose) {
     return Container(
       width: MediaQuery.of(context).size.width - 40, // 너비 설정
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 카드 간 간격 및 정렬을 위한 마진
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
@@ -166,7 +166,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               Expanded(
                 child: Text(drugDose.drugName, style: FontSystem.KR16B.copyWith(color: Colors.black)),
               ),
-              SvgPicture.asset('assets/icons/medicine.svg', width: 24, height: 24),
+              Image.asset('assets/icons/medicine.png', width: 20, height: 20),
             ],
           ),
           SizedBox(height: 8),
@@ -179,23 +179,37 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               ).createShader(bounds),
               child: Text(
                 '08:00', // 알람 시간, 연동 필요
-                style: FontSystem.KR40B.copyWith(color: Colors.white),
+                style: FontSystem.KR42B.copyWith(color: Colors.white),
               ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Checkbox(
-                value: drugDose.alarm, // 알람 설정 여부
-                onChanged: (bool? value) {
-                  // 알람 설정을 토글하는 함수 호출
-                  // 예: viewModel.toggleAlarm(drugDose.drugCode);
-                },
+              Expanded(
+                child: Row(
+                  children: [
+                    Switch(
+                      value: drugDose.alarm, // 알람 설정 여부
+                      onChanged: (bool value) {
+                        // 알람 설정을 토글하는 함수 호출
+                        // 예: viewModel.toggleAlarm(drugDose.drugCode);
+                      },
+                      activeColor: Colors.white, // 활성 상태일 때의 슬라이더 색상
+                      activeTrackColor: Colors.green, // 활성 상태일 때의 트랙 색상
+                      inactiveThumbColor: Colors.grey, // 비활성 상태일 때의 슬라이더 색상
+                      inactiveTrackColor: Colors.grey.shade300, // 비활성 상태일 때의 트랙 색상
+                    ),
+                    Text(
+                      drugDose.alarm ? ' 알람 활성' : ' 알람 비활성', // 상태에 따라 텍스트 변경
+                      style: FontSystem.KR15B.copyWith(color: drugDose.alarm ? Colors.green : Color(0xFF949BA7)),
+                    ),
+                  ],
+                ),
               ),
-              Text('처방 시간: ${drugDose.durationDay}일 전 ', style: FontSystem.KR15R.copyWith(color: Color(0xFF949BA7))),
+              Text('처방 시간: ${drugDose.durationDay}일 전', style: FontSystem.KR15R.copyWith(color: Color(0xFF949BA7))),
             ],
-          ),
+          )
         ],
       ),
     );
