@@ -12,7 +12,10 @@ class WearOsConnectivityViewModel extends GetxController {
     super.onInit();
     initializeService();
     fetchConnectedDevices();
+
   }
+
+
 
   void initializeService() async {
     await _service.initialize();

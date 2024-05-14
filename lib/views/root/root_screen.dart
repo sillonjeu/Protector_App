@@ -18,9 +18,9 @@ class RootScreen extends BaseScreen<RootViewModel> {
       () => IndexedStack(
         index: viewModel.selectedIndex,
         children: [
-          HomeScreen(), // 0
-          TelemedicineScreen(), // 1
-          DoctorScreen(), // 2
+          const HomeScreen(), // 0
+          const TelemedicineScreen(), // 1
+          const DoctorScreen(), // 2
           WearOsConnectivityScreen(), // 4
         ],
       ),

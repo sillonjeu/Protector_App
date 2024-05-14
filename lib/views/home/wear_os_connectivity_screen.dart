@@ -3,7 +3,6 @@ import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:get/get.dart';
 import '../../viewModels/home/wear_os_connectivity_viewmodel.dart';
 import '../base/base_screen.dart';
-
 class WearOsConnectivityScreen extends BaseScreen<WearOsConnectivityViewModel> {
   WearOsConnectivityScreen({super.key});
 
@@ -12,7 +11,7 @@ class WearOsConnectivityScreen extends BaseScreen<WearOsConnectivityViewModel> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return HealthDataPage();
+    return const HealthDataPage();
   }
 
   @override
@@ -31,7 +30,7 @@ class HealthDataPage extends BaseScreen<WearOsConnectivityViewModel> {
       children: <Widget>[
         Expanded(
           child: PageView(
-            children: <Widget>[
+            children: const <Widget>[
               HealthDataContainer(),
               // 다른 컨테이너 추가 가능
             ],
@@ -42,56 +41,49 @@ class HealthDataPage extends BaseScreen<WearOsConnectivityViewModel> {
   }
 }
 
-class HealthDataContainer extends StatelessWidget {
-  HealthDataContainer({super.key});
+class HealthDataContainer extends StatefulWidget {
+  const HealthDataContainer({super.key});
 
+  @override
+  _HealthDataContainerState createState() => _HealthDataContainerState();
+}
+
+class _HealthDataContainerState extends State<HealthDataContainer> {
   final List<HealthConnectDataType> types = [
     HealthConnectDataType.Steps,
     HealthConnectDataType.ExerciseSession,
   ];
 
-  Future<void> _fetchHealthData(BuildContext context) async {
-    bool readOnly = true;
-    String resultText = '';
-    String token = '';
+  bool readOnly = true;
+  String resultText = '';
+  String token = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _checkApiSupport();
+  }
+
+  Future<void> _checkApiSupport() async {
     try {
-      print('Checking if API is supported...');
-      bool isApiSupported = await HealthConnectFactory.isApiSupported();
-      print('API Supported: $isApiSupported');
+      var result = await HealthConnectFactory.isApiSupported();
+      setState(() {
+        resultText = 'isApiSupported: $result';
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+    } catch (e) {
+      setState(() {
+        resultText = e.toString();
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+    }
+  }
 
-      print('Checking if Health Connect is available...');
-      bool isAvailable = await HealthConnectFactory.isAvailable();
-      print('Health Connect Available: $isAvailable');
-
-      if (!isAvailable) {
-        print('Installing Health Connect...');
-        await HealthConnectFactory.installHealthConnect();
-        print('Health Connect installation initiated.');
-      }
-
-      print('Checking permissions...');
-      bool hasPermissions = await HealthConnectFactory.hasPermissions(types, readOnly: readOnly);
-      print('Has Permissions: $hasPermissions');
-
-      if (!hasPermissions) {
-        print('Requesting permissions...');
-        await HealthConnectFactory.requestPermissions(types, readOnly: readOnly);
-        print('Permissions requested.');
-      }
-
-      print('Fetching changes token...');
-      token = await HealthConnectFactory.getChangesToken(types);
-      print('Token: $token');
-
-      print('Fetching changes...');
-      var changes = await HealthConnectFactory.getChanges(token);
-      print('Changes: $changes');
-
+  Future<void> _fetchHealthData(BuildContext context) async {
+    try {
       var startTime = DateTime.now().subtract(const Duration(days: 4));
       var endTime = DateTime.now();
 
-      print('Fetching records...');
       final requests = <Future>[];
       Map<String, dynamic> typePoints = {};
       for (var type in types) {
@@ -106,10 +98,14 @@ class HealthDataContainer extends StatelessWidget {
       }
       await Future.wait(requests);
 
-      resultText = '$typePoints';
+      setState(() {
+        resultText = '$typePoints';
+      });
       print('All records fetched: $resultText');
     } catch (e) {
-      resultText = e.toString();
+      setState(() {
+        resultText = e.toString();
+      });
       print('Error fetching data: $resultText');
     }
 
@@ -121,15 +117,124 @@ class HealthDataContainer extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
           children: [
-            Text('의사 스크린', style: TextStyle(color: Colors.black, fontSize: 24)),
-            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _checkApiSupport,
+              child: const Text('isApiSupported'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                var result = await HealthConnectFactory.isAvailable();
+                setState(() {
+                  resultText = 'isAvailable: $result';
+                });
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+              },
+              child: const Text('Check installed'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await HealthConnectFactory.installHealthConnect();
+                  setState(() {
+                    resultText = 'Install activity started';
+                  });
+                } catch (e) {
+                  setState(() {
+                    resultText = e.toString();
+                  });
+                }
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+              },
+              child: const Text('Install Health Connect'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await HealthConnectFactory.openHealthConnectSettings();
+                  setState(() {
+                    resultText = 'Settings activity started';
+                  });
+                } catch (e) {
+                  setState(() {
+                    resultText = e.toString();
+                  });
+                }
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+              },
+              child: const Text('Open Health Connect Settings'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                var result = await HealthConnectFactory.hasPermissions(
+                  types,
+                  readOnly: readOnly,
+                );
+                setState(() {
+                  resultText = 'hasPermissions: $result';
+                });
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+              },
+              child: const Text('Has Permissions'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  token = await HealthConnectFactory.getChangesToken(types);
+                  setState(() {
+                    resultText = 'token: $token';
+                  });
+                } catch (e) {
+                  setState(() {
+                    resultText = e.toString();
+                  });
+                }
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+              },
+              child: const Text('Get Changes Token'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  var result = await HealthConnectFactory.getChanges(token);
+                  setState(() {
+                    resultText = 'changes: $result';
+                  });
+                } catch (e) {
+                  setState(() {
+                    resultText = e.toString();
+                  });
+                }
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+              },
+              child: const Text('Get Changes'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  var result = await HealthConnectFactory.requestPermissions(
+                    types,
+                    readOnly: readOnly,
+                  );
+                  setState(() {
+                    resultText = 'requestPermissions: $result';
+                  });
+                } catch (e) {
+                  setState(() {
+                    resultText = e.toString();
+                  });
+                }
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(resultText)));
+              },
+              child: const Text('Request Permissions'),
+            ),
             ElevatedButton(
               onPressed: () => _fetchHealthData(context),
-              child: const Text('Fetch Health Data'),
+              child: const Text('Get Record'),
             ),
+            Text(resultText),
           ],
         ),
       ),
