@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:hanieum/views/home/wear_os_connectivity_screen.dart';
 import '../../models/home_model.dart';
 import '../../utilities/font_system.dart';
 import '../../viewModels/home/home_viewmodel.dart';
@@ -40,6 +40,10 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               }
               return _buildHorizontalListView(context, drugDoseList);
             }),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              child: _testConnectWearOS(),
+            ),
           ],
         ),
       ),
@@ -212,6 +216,16 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
           )
         ],
       ),
+    );
+  }
+
+  Widget _testConnectWearOS() {
+    return ElevatedButton(
+      onPressed: () {
+        // GetX의 네비게이션 기능을 사용하여 WearOsConnectivityScreen으로 이동
+        Get.to(() => WearOsConnectivityScreen());
+      },
+      child: Text('Connect to Wear OS'),
     );
   }
 
