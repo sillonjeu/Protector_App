@@ -14,7 +14,7 @@ class TelemedicineScreen extends BaseScreen<TelemedicineViewModel> {
             children: <Widget>[
               Container(
                 color: Colors.white,
-                child: Center(
+                child: const Center(
                   child: Text('진료 내역 스크린', style: TextStyle(color: Colors.black, fontSize: 24)),
                 ),
               ),

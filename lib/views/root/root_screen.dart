@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hanieum/views/doctor/doctor_screen.dart';
+import 'package:hanieum/views/home/wear_os_connectivity_screen.dart';
 import 'package:hanieum/views/telemedicine/telemedicine_screen.dart';
 import '../../viewModels/root/root_viewmodel.dart';
 import '../base/base_screen.dart';
+import '../home/check_doctor_screen.dart';
 import '../home/home_screen.dart';
 import 'custom_bottom_navigation_bar.dart';
 
@@ -17,9 +19,11 @@ class RootScreen extends BaseScreen<RootViewModel> {
       () => IndexedStack(
         index: viewModel.selectedIndex,
         children: [
-          HomeScreen(), // 0
-          TelemedicineScreen(), // 1
-          DoctorScreen(), // 2
+          const HomeScreen(), // 0
+          const TelemedicineScreen(), // 1
+          const DoctorScreen(), // 2
+          WearOsConnectivityScreen(), // 3
+          CheckDoctorScreen(), // 4
         ],
       ),
     );

@@ -78,7 +78,7 @@ class CustomBottomNavigationBar extends BaseWidget<RootViewModel> {
             ? Container(// 선과 아이콘 사이의 간격 조절
           height: 2.0, // 선의 높이
           width: size, // 선의 너비를 아이콘의 크기에 맞추거나 조절
-          color: Color(0xFFA4A3E1), // 선의 색상
+          color: const Color(0xFFA4A3E1), // 선의 색상
         )
             : Container(),
       );

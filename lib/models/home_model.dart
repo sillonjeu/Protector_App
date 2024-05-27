@@ -78,3 +78,22 @@ class MetricSummary {
     value: json["value"],
   );
 }
+
+class WearOs {
+  final String id;
+  final String name;
+
+  WearOs({required this.id, required this.name});
+
+  // Map 객체에서 새로운 인스턴스를 생성하는 팩토리 메서드
+  factory WearOs.fromMap(Map<String, dynamic> map) {
+    return WearOs(
+      id: map['id'] as String,
+      name: map['name'] as String,
+    );
+  }
+
+  // 객체를 설명하는 문자열을 반환
+  @override
+  String toString() => 'Device ID: $id, Name: $name';
+}

@@ -14,7 +14,7 @@ class DoctorScreen extends BaseScreen<DoctorViewModel> {
             children: <Widget>[
               Container(
                 color: Colors.white,
-                child: Center(
+                child: const Center(
                   child: Text('의사 스크린', style: TextStyle(color: Colors.black, fontSize: 24)),
                 ),
               ),

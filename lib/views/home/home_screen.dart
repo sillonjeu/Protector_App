@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:hanieum/views/home/wear_os_connectivity_screen.dart';
 import '../../models/home_model.dart';
 import '../../utilities/font_system.dart';
 import '../../viewModels/home/home_viewmodel.dart';
+import '../../viewModels/root/root_viewmodel.dart';
 import '../base/base_screen.dart';
 
 class HomeScreen extends BaseScreen<HomeViewModel> {
@@ -15,7 +15,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -40,6 +40,14 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               }
               return _buildHorizontalListView(context, drugDoseList);
             }),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: _testConnectWearOS(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: _testDoctorScreen(),
+            ),
           ],
         ),
       ),
@@ -61,7 +69,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     return Container(
       width: screenWidth - 40,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomCenter,
           colors: [
@@ -94,7 +102,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
             width: screenWidth - 80,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color: Color(0x1AFFFFFF), // 10% 투명도의 흰색
+              color: const Color(0x1AFFFFFF), // 10% 투명도의 흰색
               borderRadius: BorderRadius.circular(16),
             ),
             child: Center( // 텍스트를 컨테이너 내 중앙에 정렬
@@ -120,7 +128,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
         borderRadius: BorderRadius.circular(16), // 모서리 둥글게
       ),
       child: ShaderMask(
-        shaderCallback: (bounds) => LinearGradient(
+        shaderCallback: (bounds) => const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomCenter,
           colors: [Color(0xFFA295FF), Color(0xFF1C336E)], // 그라데이션 색상
@@ -135,7 +143,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
   }
 
   Widget _buildHorizontalListView(BuildContext context, List<DrugDose> drugDoseList) {
-    return Container(
+    return SizedBox(
       height: 200, // 수평 스크롤 뷰의 적절한 높이 설정, 카드와 패딩을 고려하여 조정
       child: PageView.builder(
         controller: PageController(viewportFraction: 0.95), // viewportFraction은 한 번에 보이는 페이지의 비율입니다.
@@ -151,12 +159,12 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
   Widget _buildReminderCard(BuildContext context, DrugDose drugDose) {
     return Container(
       width: MediaQuery.of(context).size.width - 40, // 너비 설정
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
       ),
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -169,10 +177,10 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               Image.asset('assets/icons/medicine.png', width: 20, height: 20),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Center( // 중앙 정렬을 위해 Center 위젯 사용
             child: ShaderMask(
-              shaderCallback: (bounds) => LinearGradient(
+              shaderCallback: (bounds) => const LinearGradient(
                 colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -202,16 +210,37 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
                     ),
                     Text(
                       drugDose.alarm ? ' 알람 활성' : ' 알람 비활성', // 상태에 따라 텍스트 변경
-                      style: FontSystem.KR15B.copyWith(color: drugDose.alarm ? Colors.green : Color(0xFF949BA7)),
+                      style: FontSystem.KR15B.copyWith(color: drugDose.alarm ? Colors.green : const Color(0xFF949BA7)),
                     ),
                   ],
                 ),
               ),
-              Text('처방 시간: ${drugDose.durationDay}일 전', style: FontSystem.KR15R.copyWith(color: Color(0xFF949BA7))),
+              Text('처방 시간: ${drugDose.durationDay}일 전', style: FontSystem.KR15R.copyWith(color: const Color(0xFF949BA7))),
             ],
           )
         ],
       ),
+    );
+  }
+
+  Widget _testConnectWearOS() {
+    return ElevatedButton(
+      onPressed: () {
+        // GetX의 네비게이션 기능을 사용하여 WearOsConnectivityScreen으로 이동
+        Get.to(() => WearOsConnectivityScreen());
+      },
+      child: const Text('Connect to Wear OS'),
+    );
+  }
+
+  Widget _testDoctorScreen() {
+    return ElevatedButton(
+      onPressed: () {
+        // GetX의 네비게이션 기능을 사용하여 WearOsConnectivityScreen으로 이동
+        RootViewModel rootViewModel = Get.put(RootViewModel());
+        rootViewModel.changeIndex(4);
+      },
+      child: const Text('Test Doctor Screen'),
     );
   }
 
