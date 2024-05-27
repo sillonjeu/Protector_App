@@ -4,6 +4,7 @@ import 'package:hanieum/views/home/wear_os_connectivity_screen.dart';
 import '../../models/home_model.dart';
 import '../../utilities/font_system.dart';
 import '../../viewModels/home/home_viewmodel.dart';
+import '../../viewModels/root/root_viewmodel.dart';
 import '../base/base_screen.dart';
 
 class HomeScreen extends BaseScreen<HomeViewModel> {
@@ -40,8 +41,12 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               return _buildHorizontalListView(context, drugDoseList);
             }),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: _testConnectWearOS(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: _testDoctorScreen(),
             ),
           ],
         ),
@@ -225,6 +230,17 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
         Get.to(() => WearOsConnectivityScreen());
       },
       child: const Text('Connect to Wear OS'),
+    );
+  }
+
+  Widget _testDoctorScreen() {
+    return ElevatedButton(
+      onPressed: () {
+        // GetX의 네비게이션 기능을 사용하여 WearOsConnectivityScreen으로 이동
+        RootViewModel rootViewModel = Get.put(RootViewModel());
+        rootViewModel.changeIndex(4);
+      },
+      child: const Text('Test Doctor Screen'),
     );
   }
 
