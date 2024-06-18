@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import '../../models/home_model.dart';
-import '../../services/home_service.dart';
+import '../../models/home/home_model.dart';
+import '../../services/home/home_service.dart';
 
 class HomeViewModel extends GetxController {
   var summary = PatientDrugMetricSummaryDto().obs;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hanieum/views/home/wear_os_connectivity_screen.dart';
-import '../../models/home_model.dart';
+import '../../models/home/home_model.dart';
 import '../../utilities/font_system.dart';
 import '../../viewModels/home/home_viewmodel.dart';
 import '../../viewModels/root/root_viewmodel.dart';

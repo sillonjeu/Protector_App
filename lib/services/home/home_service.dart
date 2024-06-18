@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_wear_os_connectivity/flutter_wear_os_connectivity.dart';
-import '../models/home_model.dart';
+import '../../models/home/home_model.dart';
 import 'package:http/http.dart' as http;
 
 class PatientDrugService {

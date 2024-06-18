@@ -1,6 +1,6 @@
 import 'package:flutter_wear_os_connectivity/models/index.dart';
 import 'package:get/get.dart';
-import '../../services/home_service.dart';
+import '../../services/home/home_service.dart';
 
 class WearOsConnectivityViewModel extends GetxController {
   final WearOsService _service = WearOsService();
