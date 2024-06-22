@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hanieum/models/telemedicine/telemedicine_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class TelemedicineService {
   Future<List<Telemedicine>> fetchTelemedicines() async {
@@ -37,6 +38,14 @@ class TelemedicineService {
       // 네트워크 에러 혹은 데이터 파싱 에러 처리
       print(e.toString());
       throw Exception('Error occurred while fetching Telemedicine details: $e');
+    }
+  }
+
+  Future<void> openPDF(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }

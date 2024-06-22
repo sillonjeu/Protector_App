@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Telemedicine {
   int medicalHistoryId;
   int doctorId;
@@ -5,7 +7,6 @@ class Telemedicine {
   String diagnoise;
   DateTime visitAt;
 
-  // prescription이랑 diagnoise는 각각 pdf 형식 -> url로 넘겨줌
   Telemedicine({
     required this.medicalHistoryId,
     required this.doctorId,
@@ -14,7 +15,6 @@ class Telemedicine {
     required this.visitAt,
   });
 
-  // JSON에서 MedicalHistory 객체를 생성하는 팩토리 생성자
   factory Telemedicine.fromJson(Map<String, dynamic> json) {
     return Telemedicine(
       medicalHistoryId: json['medicalHistoryId'],
@@ -25,7 +25,6 @@ class Telemedicine {
     );
   }
 
-  // MedicalHistory 객체를 JSON 맵으로 변환하는 메소드
   Map<String, dynamic> toJson() {
     return {
       'medicalHistoryId': medicalHistoryId,
@@ -34,6 +33,11 @@ class Telemedicine {
       'diagnoise': diagnoise,
       'visitAt': visitAt.toIso8601String(),
     };
+  }
+
+  // DateTime을 "년.월.일" 형식의 문자열로 변환하는 메소드
+  String getFormattedVisitDate() {
+    return DateFormat('yyyy.MM.dd').format(visitAt);
   }
 }
 

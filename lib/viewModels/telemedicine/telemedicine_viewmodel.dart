@@ -20,8 +20,8 @@ class TelemedicineViewModel extends GetxController {
       var fetchTelemedicines = List.generate(12, (index) => Telemedicine(
           medicalHistoryId: index,
           doctorId: index,
-          prescription: 'uuid.pdf',
-          diagnoise: 'uuid.pdf',
+          prescription: 'https://seoul.intercontinental.com/upload/file/commonfilelang/15/800.pdf',
+          diagnoise: 'https://seoul.intercontinental.com/upload/file/commonfilelang/15/800.pdf',
           visitAt: DateTime.now()
       ));
       telemedicinesList.assignAll(fetchTelemedicines);
@@ -33,6 +33,14 @@ class TelemedicineViewModel extends GetxController {
     } catch (e) {
       // 에러 처리
       Get.snackbar('Error', 'Failed to fetch telemedicine data');
+    }
+  }
+
+  void launchPDF(String url) async {
+    try {
+      await service.openPDF(url);
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
     }
   }
 }

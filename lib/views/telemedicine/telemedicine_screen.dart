@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../../models/telemedicine/telemedicine_model.dart';
+import '../../utilities/font_system.dart';
 import '../../viewModels/telemedicine/telemedicine_viewmodel.dart';
 import '../base/base_screen.dart';
 
@@ -8,20 +11,37 @@ class TelemedicineScreen extends BaseScreen<TelemedicineViewModel> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: PageView(
-            children: <Widget>[
-              Container(
-                color: Colors.white,
-                child: solutionCard(),
-              ),
-              // 다른 컨테이너 추가 가능
-            ],
-          ),
+    final TelemedicineViewModel viewModel = Get.find<TelemedicineViewModel>();
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFFD9E8F7), Color(0xFFFFFFFF)],
         ),
-      ],
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 30, 20, 20),
+              child: _buildTopContainer(),
+            ),
+            Obx(() => ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: viewModel.telemedicinesList.length,
+              itemBuilder: (context, index) {
+                final telemedicine = viewModel.telemedicinesList[index];
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: SolutionCard(telemedicine: telemedicine),
+                );
+              },
+            )),
+          ],
+        ),
+      ),
     );
   }
 
@@ -32,14 +52,16 @@ class TelemedicineScreen extends BaseScreen<TelemedicineViewModel> {
   bool get wrapWithInnerSafeArea => true;
 }
 
-class solutionCard extends StatelessWidget {
+class SolutionCard extends StatelessWidget {
+  final Telemedicine telemedicine;
+  final TelemedicineViewModel viewModel = Get.find<TelemedicineViewModel>();
 
+  SolutionCard({Key? key, required this.telemedicine}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(22.96, 18.36, 22.96, 0),
-      height: 119.94, // 전체 컨테이너의 높이를 119.94로 고정
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -52,74 +74,95 @@ class solutionCard extends StatelessWidget {
           )
         ],
       ),
+
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 자식들 사이의 공간을 균등하게 분배
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // SvgPicture.asset(device.icon, width: 29.84, height: 29.84),
-                SizedBox(width: 13.2,),
-                Expanded(
-                  child: Text("테스트", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Image.asset(
+                  'assets/icons/medicine.png',
+                  width: 20,  // 이미지 너비
+                  height: 20,  // 이미지 높이
                 ),
-                Container(
-                  width: 66, // 버튼의 너비를 설정
-                  height: 25.2, // 버튼의 높이를 설정
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18.36), // 테두리 둥글게 처리
-                  ),// 버튼의 높이를 조정
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text('수정', style: TextStyle(fontSize: 11.8, color: Color(0xFF9A9B9E))),
-                    style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF9A9B9E), backgroundColor: Color(0xFFF7F7F9),
-                      padding: EdgeInsets.symmetric(horizontal: 5), // 버튼 내부 여백 조정
-                    ),
-                  ),
+                SizedBox(width: 10,),
+                Expanded(
+                  child: Text(telemedicine.getFormattedVisitDate(), style: FontSystem.KR16B.copyWith(color: Colors.black)),
                 ),
               ],
             ),
           ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 15), // 여기에 버튼의 외부 패딩 조정
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF2663FF), // 버튼 배경색
+                onPrimary: Colors.white, // 버튼의 텍스트 색상
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16), // 버튼의 곡률
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 여기에 버튼 내부 패딩 조정
+                minimumSize: Size(double.infinity, 36), // 버튼의 최소 크기 설정
+              ),
+              onPressed: () {
+                // 버튼을 눌렀을 때 실행할 코드
+              },
+              child: Text('솔루션 보기', style: FontSystem.KR20B.copyWith(color: Colors.white)), // 버튼 텍스트
+            ),
+          ),
+
           Container(
             width: double.infinity,
             height: 1,
             color: Colors.grey[300],
           ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("12", style: TextStyle(fontSize: 13.77, color: Colors.black)),
-                Container(
-                  width: 66, // 버튼의 너비를 설정
-                  height: 25.2, // 버튼의 높이를 설정
-                  decoration: BoxDecoration(
-                    color: Colors.white, // 배경색 설정
-                    border: Border.all(
-                        color: Color(0xFFF7F7F9), // 테두리 색상
-                        width: 2.3 // 테두리 너비
-                    ),
-                    borderRadius: BorderRadius.circular(18.36), // 테두리 둥글게 처리
-                  ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text('삭제', style: TextStyle(fontSize: 11.8, color: Color(0xFF9A9B9E))),
-                    style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF9A9B9E), backgroundColor: Colors.transparent, // 버튼 누름 효과 색상
-                      padding: EdgeInsets.symmetric(horizontal: 5), // 버튼 내부 여백 조정
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap, // 누르는 영역을 콘텐츠에 맞춤
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4), // 버튼의 둥근 모서리 설정
-                      ),
-                    ),
-                  ),
+                TextButton(
+                  onPressed: () => viewModel.launchPDF(telemedicine.prescription),
+                  child: Text('처방전', style: FontSystem.KR20B.copyWith(color: Colors.black)),
+                ),
+                TextButton(
+                  onPressed: () => viewModel.launchPDF(telemedicine.diagnoise),
+                  child: Text('진단서', style: FontSystem.KR20B.copyWith(color: Colors.black)),
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _buildTopContainer extends StatelessWidget {
+  const _buildTopContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            'assets/images/medical_history.png',
+            width: 24,  // 이미지 너비
+            height: 24,  // 이미지 높이
+          ),
+          SizedBox(width: 8),
+          Text(
+            '진료 내역',
+            style: FontSystem.KR22B.copyWith(color: Colors.black),
           ),
         ],
       ),
