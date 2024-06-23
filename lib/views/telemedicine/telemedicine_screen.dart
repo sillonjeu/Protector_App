@@ -35,7 +35,10 @@ class TelemedicineScreen extends BaseScreen<TelemedicineViewModel> {
                 final telemedicine = viewModel.telemedicinesList[index];
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: SolutionCard(telemedicine: telemedicine),
+                  child: SolutionCard(
+                    telemedicine: telemedicine,
+                    index: index, // 인덱스를 전달
+                  ),
                 );
               },
             )),
@@ -54,9 +57,10 @@ class TelemedicineScreen extends BaseScreen<TelemedicineViewModel> {
 
 class SolutionCard extends StatelessWidget {
   final Telemedicine telemedicine;
+  final int index; // 인덱스 추가
   final TelemedicineViewModel viewModel = Get.find<TelemedicineViewModel>();
 
-  SolutionCard({Key? key, required this.telemedicine}) : super(key: key);
+  SolutionCard({Key? key, required this.telemedicine, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +78,6 @@ class SolutionCard extends StatelessWidget {
           )
         ],
       ),
-
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -95,7 +98,6 @@ class SolutionCard extends StatelessWidget {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 15), // 여기에 버튼의 외부 패딩 조정
             child: ElevatedButton(
@@ -109,18 +111,31 @@ class SolutionCard extends StatelessWidget {
                 minimumSize: Size(double.infinity, 36), // 버튼의 최소 크기 설정
               ),
               onPressed: () {
-                // 버튼을 눌렀을 때 실행할 코드
+                viewModel.fetchTelemedicineDetails(telemedicine.medicalHistoryId);
+                print(telemedicine.medicalHistoryId);
+                Get.defaultDialog(
+                  title: 'Telemedicine Detail',
+                  content: Obx(() {
+                    if (viewModel.telemedicinesList.isEmpty) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return Text(viewModel.telemedicinesdetailsList.first.description);
+                    }
+                  }),
+                  textConfirm: 'Close',
+                  onConfirm: () {
+                    Get.back();
+                  },
+                );
               },
               child: Text('솔루션 보기', style: FontSystem.KR20B.copyWith(color: Colors.white)), // 버튼 텍스트
             ),
           ),
-
           Container(
             width: double.infinity,
             height: 1,
             color: Colors.grey[300],
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Row(

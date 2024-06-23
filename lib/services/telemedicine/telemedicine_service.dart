@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 class TelemedicineService {
+
   Future<List<Telemedicine>> fetchTelemedicines() async {
     String apiUrl = '${dotenv.env['API']}/medical/history'; // Todo: 엔드포인트 주소 확인 필요
     final response = await http.get(Uri.parse(apiUrl));
@@ -18,8 +19,7 @@ class TelemedicineService {
     }
   }
 
-  Future<List<TelemedicineDetail>> fetchTelemedicineDetails() async {
-    int medicalHistoryId = 1; // Todo: 예시 ID, 실제로는 필요에 따라 조정
+  Future<List<TelemedicineDetail>> fetchTelemedicineDetails(int medicalHistoryId) async {
     String apiUrl = '${dotenv.env['API']}/solution/detail/$medicalHistoryId';
 
     try {

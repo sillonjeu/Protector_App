@@ -4,6 +4,7 @@ import 'package:hanieum/services/telemedicine/telemedicine_service.dart';
 
 class TelemedicineViewModel extends GetxController {
   var telemedicinesList = <Telemedicine>[].obs;
+  var telemedicinesdetailsList = <TelemedicineDetail>[].obs;
   late final TelemedicineService service;
 
   TelemedicineViewModel({required this.service});
@@ -33,6 +34,22 @@ class TelemedicineViewModel extends GetxController {
     } catch (e) {
       // 에러 처리
       Get.snackbar('Error', 'Failed to fetch telemedicine data');
+    }
+  }
+
+  void fetchTelemedicineDetails(int medicalHistoryId) async {
+    try {
+      // 실제 API 사용
+      // var fetchedTelemedicines = await service.fetchTelemedicineDetails(medicalHistoryId);
+      // telemedicinesList.assignAll(fetchedTelemedicines);
+      // 더미 데이터 사용
+      var fetchedTelemedicines = List.generate(12, (index) => TelemedicineDetail(
+          description: 'Description for medical history $medicalHistoryId'
+      ));
+      telemedicinesdetailsList.assignAll(fetchedTelemedicines);
+    } catch (e) {
+      // 에러 처리
+      Get.snackbar('Error', 'Failed to fetch telemedicine data: $e');
     }
   }
 
