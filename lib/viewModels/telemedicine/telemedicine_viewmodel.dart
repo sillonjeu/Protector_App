@@ -44,7 +44,7 @@ class TelemedicineViewModel extends GetxController {
       // telemedicinesList.assignAll(fetchedTelemedicines);
       // 더미 데이터 사용
       var fetchedTelemedicines = List.generate(12, (index) => TelemedicineDetail(
-          description: 'Description for medical history $medicalHistoryId'
+          description: 'Description for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical history Description for medical history Description for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical historyDescription for medical history $medicalHistoryId'
       ));
       telemedicinesdetailsList.assignAll(fetchedTelemedicines);
     } catch (e) {

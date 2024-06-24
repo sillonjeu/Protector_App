@@ -98,6 +98,7 @@ class SolutionCard extends StatelessWidget {
               ],
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 15), // 여기에 버튼의 외부 패딩 조정
             child: ElevatedButton(
@@ -110,27 +111,66 @@ class SolutionCard extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 여기에 버튼 내부 패딩 조정
                 minimumSize: Size(double.infinity, 36), // 버튼의 최소 크기 설정
               ),
+
               onPressed: () {
                 viewModel.fetchTelemedicineDetails(telemedicine.medicalHistoryId);
-                print(telemedicine.medicalHistoryId);
+                // Todo: VM Test : print(telemedicine.medicalHistoryId);
                 Get.defaultDialog(
-                  title: 'Telemedicine Detail',
-                  content: Obx(() {
-                    if (viewModel.telemedicinesList.isEmpty) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      return Text(viewModel.telemedicinesdetailsList.first.description);
-                    }
-                  }),
-                  textConfirm: 'Close',
+                  titlePadding: EdgeInsets.zero,
+                  backgroundColor: Color(0xFFFFFFFF),
+                  title: '',
+                  content: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height - 300, // 위 아래 각각 80의 패딩을 제외한 높이
+                    ),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Obx(() {
+                          if (viewModel.telemedicinesdetailsList.isEmpty) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/medicine.png',
+                                      width: 24,  // 이미지 너비
+                                      height: 24,  // 이미지 높이
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      '솔루션',
+                                      style: FontSystem.KR20B.copyWith(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 16),  // 이미지와 텍스트 사이의 간격
+                                Text(
+                                  viewModel.telemedicinesdetailsList.first.description,
+                                  style: FontSystem.KR16R.copyWith(color: Colors.black),
+                                  textAlign: TextAlign.start, // 텍스트 정렬
+                                ),
+                              ],
+                            );
+                          }
+                        }),
+                      ),
+                    ),
+                  ),
+                  textConfirm: '닫기',
                   onConfirm: () {
                     Get.back();
                   },
                 );
               },
+
               child: Text('솔루션 보기', style: FontSystem.KR20B.copyWith(color: Colors.white)), // 버튼 텍스트
             ),
           ),
+
           Container(
             width: double.infinity,
             height: 1,
