@@ -42,10 +42,6 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
             }),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: _testConnectWearOS(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: _testDoctorScreen(),
             ),
           ],
