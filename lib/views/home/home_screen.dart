@@ -15,6 +15,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
 
     return Container(
+      height: Get.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -30,7 +31,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               child: _buildTopContainer(context),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
               child: _buildCodeCard(context),
             ),
             Obx(() {
@@ -40,10 +41,6 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               }
               return _buildHorizontalListView(context, drugDoseList);
             }),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: _testDoctorScreen(),
-            ),
           ],
         ),
       ),
@@ -74,6 +71,14 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
           ],
         ),
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 0,
+            offset: Offset(0, 10),
+          )
+        ],
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -140,9 +145,9 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
   Widget _buildHorizontalListView(BuildContext context, List<DrugDose> drugDoseList) {
     return SizedBox(
-      height: 200, // 수평 스크롤 뷰의 적절한 높이 설정, 카드와 패딩을 고려하여 조정
+      height: 185, // 수평 스크롤 뷰의 적절한 높이 설정, 카드와 패딩을 고려하여 조정
       child: PageView.builder(
-        controller: PageController(viewportFraction: 0.95), // viewportFraction은 한 번에 보이는 페이지의 비율입니다.
+        controller: PageController(viewportFraction: 0.95), // viewportFraction은 한 번에 보이는 페이지의 비율
         itemCount: drugDoseList.length,
         itemBuilder: (context, index) {
           final drugDose = drugDoseList[index];
@@ -154,13 +159,20 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
   Widget _buildReminderCard(BuildContext context, DrugDose drugDose) {
     return Container(
-      width: MediaQuery.of(context).size.width - 40, // 너비 설정
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 0,
+            offset: Offset(0, 10),
+          )
+        ],
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(top: 16,left: 16,right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -173,7 +185,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               Image.asset('assets/icons/medicine.png', width: 20, height: 20),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Center( // 중앙 정렬을 위해 Center 위젯 사용
             child: ShaderMask(
               shaderCallback: (bounds) => const LinearGradient(
@@ -182,36 +194,40 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
                 end: Alignment.bottomRight,
               ).createShader(bounds),
               child: Text(
-                '08:00', // 알람 시간, 연동 필요
+                '08:00', // Todo: 알람 시간, 연동 필요
                 style: FontSystem.KR42B.copyWith(color: Colors.white),
               ),
             ),
           ),
+          SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    Switch(
-                      value: drugDose.alarm, // 알람 설정 여부
-                      onChanged: (bool value) {
-                        // 알람 설정을 토글하는 함수 호출
-                        // 예: viewModel.toggleAlarm(drugDose.drugCode);
+              Row(
+                children: [
+                  Container(
+                    width: 30,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.centerLeft,
+                      icon: Icon(
+                        drugDose.alarm ? Icons.check_circle : Icons.cancel,
+                        color: drugDose.alarm ? Colors.green : Colors.red,
+                      ),
+                      onPressed: () {
+                        viewModel.toggleAlarm(drugDose.drugCode);
                       },
-                      activeColor: Colors.white, // 활성 상태일 때의 슬라이더 색상
-                      activeTrackColor: Colors.green, // 활성 상태일 때의 트랙 색상
-                      inactiveThumbColor: Colors.grey, // 비활성 상태일 때의 슬라이더 색상
-                      inactiveTrackColor: Colors.grey.shade300, // 비활성 상태일 때의 트랙 색상
                     ),
-                    Text(
-                      drugDose.alarm ? ' 알람 활성' : ' 알람 비활성', // 상태에 따라 텍스트 변경
-                      style: FontSystem.KR15B.copyWith(color: drugDose.alarm ? Colors.green : const Color(0xFF949BA7)),
+                  ),
+                  Container(
+                    child: Text(
+                      drugDose.alarm ? '알람 활성' : '알람 비활성', // 상태에 따라 텍스트 변경
+                      style: FontSystem.KR16B.copyWith(color: drugDose.alarm ? Colors.green : Colors.red),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Text('처방 시간: ${drugDose.durationDay}일 전', style: FontSystem.KR15R.copyWith(color: const Color(0xFF949BA7))),
+              Text('복용 기간: ${drugDose.durationDay}일', style: FontSystem.KR16R.copyWith(color: const Color(0xFF949BA7))),
             ],
           )
         ],

@@ -15,6 +15,7 @@ class DoctorScreen extends BaseScreen<DoctorViewModel> {
     // Fetching the ViewModel using GetX dependency injection
     final DoctorViewModel viewModel = Get.find<DoctorViewModel>();
     return Container(
+      height: Get.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -66,6 +67,14 @@ class _DoctorContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 0,
+            offset: Offset(0, 10),
+          )
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10), // Padding for inner contents
