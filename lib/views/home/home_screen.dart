@@ -114,7 +114,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               ),
               Text(
                 '진찰하시는 의사에게 보여주세요',
-                style: FontSystem.KR10B.copyWith(color: Colors.white),
+                style: FontSystem.KR12B.copyWith(color: Colors.white),
               ),
             ],
           ),
