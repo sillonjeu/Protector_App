@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hanieum/views/home/wear_os_connectivity_screen.dart';
 import '../../models/home/home_model.dart';
+import '../../utilities/app_routes.dart';
 import '../../utilities/font_system.dart';
 import '../../viewModels/home/home_viewmodel.dart';
 import '../../viewModels/root/root_viewmodel.dart';
 import '../base/base_screen.dart';
+import '../metric/bloodpressure_screen.dart';
 
 class HomeScreen extends BaseScreen<HomeViewModel> {
   const HomeScreen({super.key});
@@ -259,48 +261,53 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: screenWidth / 2 - 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: Offset(0, 10),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text('혈압', style: FontSystem.KR16B.copyWith(color: Colors.black)),
-              ),
-              Image.asset('assets/images/bloodpressure.png', width: 25, height: 25),
-            ],
-          ),
-          SizedBox(height: 8),
-          Center( // 중앙 정렬을 위해 Center 위젯 사용
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds),
-              child: Text(
-                '-', // Todo: 연동 필요
-                style: FontSystem.KR42B.copyWith(color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(Routes.BLOOD_PRESSURE);
+      },
+      child: Container(
+        width: screenWidth / 2 - 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(0, 10),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text('혈압', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+                ),
+                Image.asset('assets/images/bloodpressure.png', width: 25, height: 25),
+              ],
+            ),
+            SizedBox(height: 8),
+            Center( // 중앙 정렬을 위해 Center 위젯 사용
+              child: ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: Text(
+                  '-', // Todo: 연동 필요
+                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
