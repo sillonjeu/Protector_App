@@ -13,6 +13,7 @@ class TelemedicineScreen extends BaseScreen<TelemedicineViewModel> {
   Widget buildBody(BuildContext context) {
     final TelemedicineViewModel viewModel = Get.find<TelemedicineViewModel>();
     return Container(
+      height: Get.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -72,7 +73,7 @@ class SolutionCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
-            blurRadius: 50,
+            blurRadius: 10,
             spreadRadius: 0,
             offset: Offset(0, 10),
           )
