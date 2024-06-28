@@ -69,6 +69,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 안녕하세요
   Widget _buildTopContainer(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
@@ -79,6 +80,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 환자 코드
   Widget _buildCodeCard(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Container(
@@ -141,6 +143,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 알람이 없을 때 화면
   Widget _ifAlarmIsEmpty(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 40, // 너비 설정
@@ -165,6 +168,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 알람을 보여주기 위한 리스트
   Widget _buildHorizontalListView(BuildContext context, List<DrugDose> drugDoseList) {
     return SizedBox(
       height: 185, // 수평 스크롤 뷰의 적절한 높이 설정, 카드와 패딩을 고려하여 조정
@@ -179,6 +183,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 알람 화면
   Widget _buildReminderCard(BuildContext context, DrugDose drugDose) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -257,6 +262,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 혈압
   Widget _buildBloodPressureCard(BuildContext context) {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
     double screenWidth = MediaQuery.of(context).size.width;
@@ -312,156 +318,175 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 스트레스, 수면
   Widget _buildStressSleepCard(BuildContext context) {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: screenWidth / 2 - 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: Offset(0, 10),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text('스트레스/수면', style: FontSystem.KR16B.copyWith(color: Colors.black)),
-              ),
-              Image.asset('assets/images/stresssleep.png', width: 20, height: 20),
-            ],
-          ),
-          SizedBox(height: 8),
-          Center( // 중앙 정렬을 위해 Center 위젯 사용
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds),
-              child: Text(
-                '-/-', // Todo: 연동 필요
-                style: FontSystem.KR42B.copyWith(color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        // Get.to(() => AnotherScreen());
+      },
+      child: Container(
+        width: screenWidth / 2 - 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(0, 10),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text('스트레스/수면', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+                ),
+                Image.asset('assets/images/stresssleep.png', width: 20, height: 20),
+              ],
+            ),
+            SizedBox(height: 8),
+            Center( // 중앙 정렬을 위해 Center 위젯 사용
+              child: ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: Text(
+                  '-/-', // Todo: 연동 필요
+                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
+  // 심박수, 심전도
   Widget _buildElectrocardiogramHeartrateCard(BuildContext context) {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: screenWidth / 2 - 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: Offset(0, 10),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text('심전도/심박수', style: FontSystem.KR16B.copyWith(color: Colors.black)),
-              ),
-              Image.asset('assets/images/electrocardiogramheartrate.png', width: 25, height: 25),
-            ],
-          ),
-          SizedBox(height: 8),
-          Center( // 중앙 정렬을 위해 Center 위젯 사용
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds),
-              child: Text(
-                '-/-', // Todo: 연동 필요
-                style: FontSystem.KR42B.copyWith(color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(Routes.ECG_HEARTRATE);
+      },
+      child: Container(
+        width: screenWidth / 2 - 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(0, 10),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text('심전도/심박수', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+                ),
+                Image.asset('assets/images/electrocardiogramheartrate.png', width: 25, height: 25),
+              ],
+            ),
+            SizedBox(height: 8),
+            Center( // 중앙 정렬을 위해 Center 위젯 사용
+              child: ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: Text(
+                  '-/-', // Todo: 연동 필요
+                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
+  // 혈중 산소 포화
   Widget _buildBloodOxygenSaturationCard(BuildContext context) {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: screenWidth / 2 - 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: Offset(0, 10),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text('혈중 산소 포화', style: FontSystem.KR16B.copyWith(color: Colors.black)),
-              ),
-              Image.asset('assets/images/bloodoxygensaturation.png', width: 25, height: 25),
-            ],
-          ),
-          SizedBox(height: 8),
-          Center( // 중앙 정렬을 위해 Center 위젯 사용
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds),
-              child: Text(
-                '-', // Todo: 연동 필요
-                style: FontSystem.KR42B.copyWith(color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        // Get.to(() => AnotherScreen()); // 페이지 이동 예시
+      },
+      child: Container(
+        width: screenWidth / 2 - 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(0, 10),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text('혈중 산소 포화', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+                ),
+                Image.asset('assets/images/bloodoxygensaturation.png', width: 25, height: 25),
+              ],
+            ),
+            SizedBox(height: 8),
+            Center( // 중앙 정렬을 위해 Center 위젯 사용
+              child: ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: Text(
+                  '-', // Todo: 연동 필요
+                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
+  // WearOs 연동 test
   Widget _testConnectWearOS() {
     return ElevatedButton(
       onPressed: () {
@@ -472,6 +497,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
+  // 주치의 연동 확인 스크린
   Widget _testDoctorScreen() {
     return ElevatedButton(
       onPressed: () {
