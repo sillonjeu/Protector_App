@@ -33,8 +33,12 @@ class BloodPressureScreen extends BaseScreen<BloodPressureViewModel> {
               child: _buildAverageBloodPressureCard(context),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
               child: _buildBloodPressureCard(context),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+              child: _buildWarningCard(context),
             ),
           ],
         ),
@@ -126,7 +130,7 @@ class BloodPressureScreen extends BaseScreen<BloodPressureViewModel> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      width: screenWidth - 40,
+      width: screenWidth - 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
@@ -144,12 +148,10 @@ class BloodPressureScreen extends BaseScreen<BloodPressureViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Expanded(
-                child: Text('혈압', style: FontSystem.KR16B.copyWith(color: Colors.black)),
-              ),
               Image.asset('assets/images/bloodpressure.png', width: 25, height: 25),
+              SizedBox(width: 5,),
+              Text('한달 간 혈압 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
           SizedBox(height: 8),
@@ -168,6 +170,48 @@ class BloodPressureScreen extends BaseScreen<BloodPressureViewModel> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildWarningCard(BuildContext context) {
+    final BloodPressureViewModel viewModel = Get.find<BloodPressureViewModel>();
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      width: screenWidth - 60,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 0,
+            offset: Offset(0, 10),
+          )
+        ],
+      ),
+      padding: const EdgeInsets.only(top: 32, left: 32, right: 32, bottom: 32),
+      child: Center(
+        child: Align(
+          alignment: Alignment.center,
+          child: RichText(
+            textAlign: TextAlign.center, // 텍스트 중앙 정렬
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '오늘은 - 일 전보다 - 정도 높아요\n', // Todo: 연동 필요
+                  style: FontSystem.KR20B.copyWith(color: Colors.black),
+                ),
+                TextSpan(
+                  text: '관리에 유의해 주세요!',
+                  style: FontSystem.KR20B.copyWith(color: Colors.black), // 다른 스타일 적용 예시
+                ),
+              ],
+            ),
+          ),
+        ),
+      )
     );
   }
 
