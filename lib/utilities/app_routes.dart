@@ -6,4 +6,5 @@ abstract class Routes {
   static const BLOOD_PRESSURE = '/bloodPressure';
   static const ECG_HEARTRATE = '/ecg_heartrate';
   static const STRESS_SLEEP = '/stress_sleep';
+  static const BLOOD_OXYGEN_SATURATION = '/blood_oxygen_saturation';
 }

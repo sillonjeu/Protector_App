@@ -63,6 +63,10 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+              child: _testDoctorScreen(),
+            ),
           ],
         ),
       ),
@@ -437,7 +441,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
     return GestureDetector(
       onTap: () {
-        // Get.to(() => AnotherScreen()); // 페이지 이동 예시
+        Get.toNamed(Routes.BLOOD_OXYGEN_SATURATION);
       },
       child: Container(
         width: screenWidth / 2 - 40,
