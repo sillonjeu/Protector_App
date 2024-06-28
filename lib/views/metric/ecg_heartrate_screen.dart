@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hanieum/viewModels/metric/ecg_heartrate_viewmodel.dart';
 import '../../utilities/font_system.dart';
-import '../../viewModels/home/home_viewmodel.dart';
 import '../../viewModels/metric/bloodpressure_viewmodel.dart';
 import '../base/base_screen.dart';
 

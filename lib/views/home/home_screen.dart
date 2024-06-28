@@ -325,7 +325,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
     return GestureDetector(
       onTap: () {
-        // Get.to(() => AnotherScreen());
+        Get.toNamed(Routes.STRESS_SLEEP);
       },
       child: Container(
         width: screenWidth / 2 - 40,

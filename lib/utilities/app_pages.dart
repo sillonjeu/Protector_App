@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hanieum/views/metric/stress_sleep_screen.dart';
 import '../bindings/root_binding.dart';
 import '../views/home/home_screen.dart';
 import '../views/metric/bloodpressure_screen.dart';
@@ -25,6 +26,11 @@ List<GetPage> appPages = [
   GetPage(
     name: Routes.ECG_HEARTRATE,
     page: () => const EcgHeartrateScreen(),
+    binding: RootBinding(),
+  ),
+  GetPage(
+    name: Routes.STRESS_SLEEP,
+    page: () => const StressSleepScreen(),
     binding: RootBinding(),
   ),
 ];
