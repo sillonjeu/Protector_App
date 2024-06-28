@@ -13,6 +13,7 @@ class CheckDoctorScreen extends BaseScreen<HomeViewModel> {
     final HomeViewModel viewModel = Get.find<HomeViewModel>();
 
     return Container(
+      height: Get.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,

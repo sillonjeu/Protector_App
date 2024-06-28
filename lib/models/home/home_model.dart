@@ -24,7 +24,7 @@ class DrugDose {
   int durationDay;
   String description;
   bool alarm;
-  String alarmType; // 이 부분은 enum으로 변경하면 됩니다.
+  String alarmType;
   // DateTime or String alarmTime; // 알람 시간 형식은 구현 시 결정
 
   DrugDose({
