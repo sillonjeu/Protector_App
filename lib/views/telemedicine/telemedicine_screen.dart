@@ -104,8 +104,7 @@ class SolutionCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 15), // 여기에 버튼의 외부 패딩 조정
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF2663FF), // 버튼 배경색
-                onPrimary: Colors.white, // 버튼의 텍스트 색상
+                foregroundColor: Colors.white, backgroundColor: Color(0xFF2663FF), // 버튼의 텍스트 색상
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16), // 버튼의 곡률
                 ),
