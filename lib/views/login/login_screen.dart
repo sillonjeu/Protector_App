@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../services/login/login_service.dart';
 import '../../utilities/font_system.dart';
 import '../../viewModels/login/login_viewmodel.dart';
@@ -80,7 +79,7 @@ class _Middle extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
           child: Row(
             children: <Widget>[
               Expanded(child: Divider()),
@@ -92,77 +91,77 @@ class _Middle extends StatelessWidget {
             ],
           ),
         ),
-        Obx(() => TextField(
-          focusNode: viewModel.emailFocusNode,
-          style: FontSystem.KR16R.copyWith(color: Color(0xFF262626)),
-          onChanged: (value) => viewModel.email.value = value,
-          decoration: InputDecoration(
-            labelText: "Email",
-            labelStyle: FontSystem.KR16R.copyWith(color: Color(0xFF7C8BA0)),
-            fillColor: Color(0xFFF5F9FE),
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: viewModel.isEmailFocused.value ? Color(0xFF3461FD) : Colors.white,
-                width: 1,
-              ),
-            ),
-          ),
-        )),
-        SizedBox(height: 16),
-        Obx(() => TextField(
-          obscureText: !viewModel.passwordVisible.value,
-          focusNode: viewModel.passwordFocusNode,
-          style: FontSystem.KR16R.copyWith(color: Color(0xFF262626)),
-          onChanged: (value) => viewModel.password.value = value,
-          decoration: InputDecoration(
-            labelText: "Password",
-            labelStyle: FontSystem.KR16R.copyWith(color: Color(0xFF7C8BA0)),
-            fillColor: Color(0xFFF5F9FE),
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: viewModel.isPasswordFocused.value ? Color(0xFF3461FD) : Colors.white,
-                width: 1,
-              ),
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                viewModel.passwordVisible.value ? Icons.visibility_off : Icons.visibility,
-                color: Color(0xFF3B4054),
-              ),
-              onPressed: () {
-                viewModel.passwordVisible.value = !viewModel.passwordVisible.value;
-              },
-            ),
-          ),
-        )),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: EdgeInsets.only(right: 24), // 오른쪽 패딩 24
-            child: TextButton(
-              onPressed: () {
-                // Forgot Password Screen
-              },
-              child: Text(
-                'Forget Password?',
-                style: FontSystem.KR12R.copyWith(color: Color(0xFF7C8BA0)),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        )
+        // Obx(() => TextField(
+        //   focusNode: viewModel.emailFocusNode,
+        //   style: FontSystem.KR16R.copyWith(color: Color(0xFF262626)),
+        //   onChanged: (value) => viewModel.email.value = value,
+        //   decoration: InputDecoration(
+        //     labelText: "Email",
+        //     labelStyle: FontSystem.KR16R.copyWith(color: Color(0xFF7C8BA0)),
+        //     fillColor: Color(0xFFF5F9FE),
+        //     filled: true,
+        //     border: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(14),
+        //       borderSide: BorderSide.none,
+        //     ),
+        //     focusedBorder: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(14),
+        //       borderSide: BorderSide(
+        //         color: viewModel.isEmailFocused.value ? Color(0xFF3461FD) : Colors.white,
+        //         width: 1,
+        //       ),
+        //     ),
+        //   ),
+        // )),
+        // SizedBox(height: 16),
+        // Obx(() => TextField(
+        //   obscureText: !viewModel.passwordVisible.value,
+        //   focusNode: viewModel.passwordFocusNode,
+        //   style: FontSystem.KR16R.copyWith(color: Color(0xFF262626)),
+        //   onChanged: (value) => viewModel.password.value = value,
+        //   decoration: InputDecoration(
+        //     labelText: "Password",
+        //     labelStyle: FontSystem.KR16R.copyWith(color: Color(0xFF7C8BA0)),
+        //     fillColor: Color(0xFFF5F9FE),
+        //     filled: true,
+        //     border: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(14),
+        //       borderSide: BorderSide.none,
+        //     ),
+        //     focusedBorder: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(14),
+        //       borderSide: BorderSide(
+        //         color: viewModel.isPasswordFocused.value ? Color(0xFF3461FD) : Colors.white,
+        //         width: 1,
+        //       ),
+        //     ),
+        //     suffixIcon: IconButton(
+        //       icon: Icon(
+        //         viewModel.passwordVisible.value ? Icons.visibility_off : Icons.visibility,
+        //         color: Color(0xFF3B4054),
+        //       ),
+        //       onPressed: () {
+        //         viewModel.passwordVisible.value = !viewModel.passwordVisible.value;
+        //       },
+        //     ),
+        //   ),
+        // )),
+        // Align(
+        //   alignment: Alignment.centerRight,
+        //   child: Padding(
+        //     padding: EdgeInsets.only(right: 24), // 오른쪽 패딩 24
+        //     child: TextButton(
+        //       onPressed: () {
+        //         // Forgot Password Screen
+        //       },
+        //       child: Text(
+        //         'Forget Password?',
+        //         style: FontSystem.KR12R.copyWith(color: Color(0xFF7C8BA0)),
+        //         textAlign: TextAlign.center,
+        //       ),
+        //     ),
+        //   ),
+        // )
       ],
     );
   }
@@ -196,7 +195,7 @@ class _Bottom extends StatelessWidget {
             }
           },
           child: Text(
-            'Log In',
+            '비회원으로 이용하기',
             style: FontSystem.KR16M.copyWith(color: Colors.white),
             textAlign: TextAlign.center,
           ),

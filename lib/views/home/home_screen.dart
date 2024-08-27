@@ -7,7 +7,10 @@ import '../../utilities/font_system.dart';
 import '../../viewModels/home/home_viewmodel.dart';
 import '../../viewModels/root/root_viewmodel.dart';
 import '../base/base_screen.dart';
+import '../metric/blood_oxygen_saturation_screen.dart';
 import '../metric/bloodpressure_screen.dart';
+import '../metric/ecg_heartrate_screen.dart';
+import '../metric/stress_sleep_screen.dart';
 
 class HomeScreen extends BaseScreen<HomeViewModel> {
   const HomeScreen({super.key});
@@ -273,7 +276,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.BLOOD_PRESSURE);
+        Get.to(BloodPressureScreen());
       },
       child: Container(
         width: screenWidth / 2 - 40,
@@ -329,7 +332,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.STRESS_SLEEP);
+        Get.to(StressSleepScreen());
       },
       child: Container(
         width: screenWidth / 2 - 40,
@@ -385,7 +388,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.ECG_HEARTRATE);
+        Get.to(EcgHeartrateScreen());
       },
       child: Container(
         width: screenWidth / 2 - 40,
@@ -441,7 +444,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
 
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.BLOOD_OXYGEN_SATURATION);
+        Get.to(BloodOxygenSaturationScreen());
       },
       child: Container(
         width: screenWidth / 2 - 40,

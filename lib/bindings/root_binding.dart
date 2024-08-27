@@ -27,10 +27,12 @@ class RootBinding extends Bindings {
     Get.lazyPut(() => HomeViewModel(service: Get.find()));
     Get.lazyPut(() => TelemedicineViewModel(service: TelemedicineService()));
     Get.lazyPut(() => DoctorViewModel(service: Get.find()));
-    Get.lazyPut(() => BloodPressureViewModel());
-    Get.lazyPut(() => EcgHeartrateViewModel());
-    Get.lazyPut(() => StressSleepViewModel());
-    Get.lazyPut(() => BloodOxygenSaturationViewModel());
+
+    Get.put(BloodPressureViewModel());
+    Get.put(EcgHeartrateViewModel());
+    Get.put(StressSleepViewModel());
+    Get.put(BloodOxygenSaturationViewModel());
+
     Get.lazyPut(() => DoctorService());
     Get.lazyPut(() => TelemedicineService());
     Get.lazyPut(() => WearOsConnectivityViewModel());
