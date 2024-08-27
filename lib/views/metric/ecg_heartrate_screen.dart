@@ -1,50 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hanieum/viewModels/metric/ecg_heartrate_viewmodel.dart';
 import '../../utilities/font_system.dart';
-import '../../viewModels/metric/bloodpressure_viewmodel.dart';
-import '../base/base_screen.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'dart:convert';
+import'../../models/home/dummy_data.dart';
 
-class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
-  const EcgHeartrateScreen({super.key});
+class EcgHeartrateScreen extends StatelessWidget {
+  const EcgHeartrateScreen({Key? key}) : super(key: key);
 
   @override
-  Widget buildBody(BuildContext context) {
-    final EcgHeartrateViewModel viewModel = Get.find<EcgHeartrateViewModel>();
-
-    return Container(
-      height: Get.height,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFD9E8F7), Color(0xFFFFFFFF)],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        height: Get.height,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFFD9E8F7), Color(0xFFFFFFFF)],
+          ),
         ),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: _buildTopContainer(context),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: _buildAverageHeartRateCard(context),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: _buildHeartRateCard(context),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: _buildTodayECGCard(context),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: _buildWarningCard(context),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                child: _buildTopContainer(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                child: _buildAverageHeartRateCard(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                child: _buildHeartRateCard(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                child: _buildTodayECGCard(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                child: _buildWarningCard(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -76,9 +76,13 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
       ),
     );
   }
-
   Widget _buildAverageHeartRateCard(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    List<Map<String, dynamic>> data = (json.decode(DummyData.heartRateData) as List<dynamic>)
+        .cast<Map<String, dynamic>>();
+
+    double average = data.map((item) => item['average'] as double).reduce((a, b) => a + b) / data.length;
+
     return Container(
       width: screenWidth - 40,
       decoration: BoxDecoration(
@@ -102,24 +106,23 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // 자식들을 왼쪽으로 정렬
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             '한달 간 평균 심박수',
             style: FontSystem.KR22B.copyWith(color: Colors.white),
           ),
-          const SizedBox(height: 10), // 텍스트와 박스 사이의 간격
+          const SizedBox(height: 10),
           Container(
             width: screenWidth - 80,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color: const Color(0x1AFFFFFF), // 10% 투명도의 흰색
+              color: const Color(0x1AFFFFFF),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Center( // 텍스트를 컨테이너 내 중앙에 정렬
+            child: Center(
               child: Text(
-                // Todo: 연동
-                '-', // 작은 컨테이너 안의 텍스트
+                '${average.toStringAsFixed(1)} bpm',
                 style: FontSystem.KR35B.copyWith(color: Colors.white),
               ),
             ),
@@ -131,6 +134,8 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
 
   Widget _buildHeartRateCard(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    List<Map<String, dynamic>> data = (json.decode(DummyData.heartRateData) as List<dynamic>)
+        .cast<Map<String, dynamic>>();
 
     return Container(
       width: screenWidth - 60,
@@ -146,7 +151,7 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
           )
         ],
       ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -157,8 +162,53 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
               Text('한달 간 심박수 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
-          SizedBox(height: 8),
-          Center( // 중앙 정렬을 위해 Center 위젯 사용
+          SizedBox(height: 16),
+          AspectRatio(
+            aspectRatio: 1.70,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(show: false),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                ),
+                borderData: FlBorderData(show: false),
+                minX: 0,
+                maxX: data.length.toDouble() - 1,
+                minY: 0,
+                maxY: data.map((item) => item['average'] as double).reduce((a, b) => a > b ? a : b),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: data.asMap().entries.map((entry) =>
+                        FlSpot(entry.key.toDouble(), entry.value['average'])
+                    ).toList(),
+                    isCurved: true,
+                    color: Colors.blue.withOpacity(0.8),
+                    barWidth: 4,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(show: false),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: Colors.blue.withOpacity(0.1),
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.blue.withOpacity(0.4),
+                          Colors.blue.withOpacity(0.1),
+                        ],
+                        stops: const [0.1, 1.0],
+                      ),
+                    ),
+                  ),
+                ],
+                lineTouchData: LineTouchData(enabled: false),
+                backgroundColor: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+          Center(
             child: ShaderMask(
               shaderCallback: (bounds) => const LinearGradient(
                 colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
@@ -166,7 +216,7 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
                 end: Alignment.bottomRight,
               ).createShader(bounds),
               child: Text(
-                '-', // Todo: 연동 필요
+                '${data.last['average'].toStringAsFixed(1)} bpm',
                 style: FontSystem.KR42B.copyWith(color: Colors.white),
               ),
             ),
@@ -178,6 +228,8 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
 
   Widget _buildTodayECGCard(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    List<Map<String, dynamic>> data = (json.decode(DummyData.ecgData) as List<dynamic>)
+        .cast<Map<String, dynamic>>();
 
     return Container(
       width: screenWidth - 60,
@@ -193,7 +245,7 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
           )
         ],
       ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -204,17 +256,48 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
               Text('오늘 측정한 심전도', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
-          SizedBox(height: 8),
-          Center( // 중앙 정렬을 위해 Center 위젯 사용
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds),
-              child: Text(
-                '-', // Todo: 연동 필요
-                style: FontSystem.KR42B.copyWith(color: Colors.white),
+          SizedBox(height: 16),
+          AspectRatio(
+            aspectRatio: 1.70,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(show: false),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                ),
+                borderData: FlBorderData(show: false),
+                minX: 0,
+                maxX: 10,
+                minY: -0.5,
+                maxY: 1.5,
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: data.map((item) =>
+                        FlSpot(item['time'] / 100, item['voltage'])
+                    ).toList(),
+                    isCurved: true,
+                    color: Colors.red.withOpacity(0.8),
+                    barWidth: 4,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(show: false),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: Colors.red.withOpacity(0.1),
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.red.withOpacity(0.4),
+                          Colors.red.withOpacity(0.1),
+                        ],
+                        stops: const [0.1, 1.0],
+                      ),
+                    ),
+                  ),
+                ],
+                lineTouchData: LineTouchData(enabled: false),
+                backgroundColor: Colors.white,
               ),
             ),
           ),
@@ -224,8 +307,14 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
   }
 
   Widget _buildWarningCard(BuildContext context) {
-    final BloodPressureViewModel viewModel = Get.find<BloodPressureViewModel>();
     double screenWidth = MediaQuery.of(context).size.width;
+    List<Map<String, dynamic>> data = (json.decode(DummyData.heartRateData) as List<dynamic>)
+        .cast<Map<String, dynamic>>();
+
+    double lastValue = data.last['average'];
+    double firstValue = data.first['average'];
+    int daysDifference = data.length - 1;
+    String difference = (lastValue - firstValue).abs().toStringAsFixed(1);
 
     return Container(
         width: screenWidth - 60,
@@ -246,16 +335,16 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
           child: Align(
             alignment: Alignment.center,
             child: RichText(
-              textAlign: TextAlign.center, // 텍스트 중앙 정렬
+              textAlign: TextAlign.center,
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '오늘은 - 일 전보다 - 정도 높아요\n', // Todo: 연동 필요
+                    text: '오늘은 $daysDifference일 전보다 $difference bpm 정도 ${lastValue > firstValue ? '높아요' : '낮아요'}\n',
                     style: FontSystem.KR20B.copyWith(color: Colors.black),
                   ),
                   TextSpan(
                     text: '관리에 유의해 주세요!',
-                    style: FontSystem.KR20B.copyWith(color: Colors.black), // 다른 스타일 적용 예시
+                    style: FontSystem.KR20B.copyWith(color: Colors.black),
                   ),
                 ],
               ),
@@ -264,10 +353,4 @@ class EcgHeartrateScreen extends BaseScreen<EcgHeartrateViewModel> {
         )
     );
   }
-
-  @override
-  bool get wrapWithOuterSafeArea => true;
-
-  @override
-  bool get wrapWithInnerSafeArea => true;
 }
