@@ -18,12 +18,14 @@ class TelemedicineViewModel extends GetxController {
   void fetchTelemedicines() async {
     try {
       // 서버 호출 대신 더미 데이터 생성
+      DateTime startDate = DateTime(2023, 8, 1);
+
       var fetchTelemedicines = List.generate(12, (index) => Telemedicine(
           medicalHistoryId: index,
           doctorId: index,
           prescription: 'https://seoul.intercontinental.com/upload/file/commonfilelang/15/800.pdf',
           diagnoise: 'https://seoul.intercontinental.com/upload/file/commonfilelang/15/800.pdf',
-          visitAt: DateTime.now()
+          visitAt: startDate.add(Duration(days: index * 7)),
       ));
       telemedicinesList.assignAll(fetchTelemedicines);
 

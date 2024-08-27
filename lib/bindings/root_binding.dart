@@ -8,8 +8,12 @@ import 'package:hanieum/viewModels/metric/ecg_heartrate_viewmodel.dart';
 import 'package:hanieum/viewModels/metric/stress_sleep_viewmodel.dart';
 import 'package:hanieum/viewModels/telemedicine/telemedicine_viewmodel.dart';
 import '../services/home/home_service.dart';
+import '../services/login/login_service.dart';
+import '../services/register/register_service.dart';
 import '../viewModels/home/home_viewmodel.dart';
 import '../viewModels/home/wear_os_connectivity_viewmodel.dart';
+import '../viewModels/login/login_viewmodel.dart';
+import '../viewModels/register/register_viewmodel.dart';
 import '../viewModels/root/root_viewmodel.dart';
 
 class RootBinding extends Bindings {
@@ -18,13 +22,16 @@ class RootBinding extends Bindings {
     // ParentViewModel is singleton
     Get.put(RootViewModel());
     // ChildViewModel is singleton
+    Get.lazyPut(() => LoginViewModel(LoginService()));
+    Get.lazyPut(() => RegisterViewModel(RegisterService()));
     Get.lazyPut(() => HomeViewModel(service: Get.find()));
     Get.lazyPut(() => TelemedicineViewModel(service: TelemedicineService()));
     Get.lazyPut(() => DoctorViewModel(service: Get.find()));
-    Get.lazyPut(() => BloodPressureViewModel());
-    Get.lazyPut(() => EcgHeartrateViewModel());
-    Get.lazyPut(() => StressSleepViewModel());
-    Get.lazyPut(() => BloodOxygenSaturationViewModel());
+
+    Get.put(BloodPressureViewModel());
+    Get.put(EcgHeartrateViewModel());
+    Get.put(StressSleepViewModel());
+    Get.put(BloodOxygenSaturationViewModel());
 
     Get.lazyPut(() => DoctorService());
     Get.lazyPut(() => TelemedicineService());

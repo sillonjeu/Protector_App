@@ -35,7 +35,7 @@ class HomeViewModel extends GetxController {
         drugDoseList: List.generate(5, (index) =>
             DrugDose(
               drugCode: 'drugCode$index',
-              drugName: 'Drug Name $index',
+              drugName: '혈압약 ',
               singleDose: 1.0 * index,
               dosesPerDay: 3,
               durationDay: 7,
