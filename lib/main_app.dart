@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:hanieum/utilities/app_pages.dart';
+import 'package:hanieum/views/login/login_screen.dart';
+import 'package:hanieum/views/root/root_screen.dart';
 import 'bindings/root_binding.dart';
 
 class MainApp extends StatelessWidget {
@@ -34,7 +36,15 @@ class MainApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFf6f6f8),
       ),
       initialRoute: initialRoute,
-      getPages: appPages,
+      home: LoginScreen(),
+      getPages: [
+        GetPage(
+            name: '/', page: () => const RootScreen(), binding: RootBinding()),
+        GetPage(
+            name: '/login',
+            page: () => LoginScreen(),
+            binding: RootBinding()),
+      ],
       initialBinding: RootBinding(),
     );
   }

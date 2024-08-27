@@ -76,101 +76,132 @@ class BloodOxygenSaturationScreen extends BaseScreen<BloodOxygenSaturationViewMo
 
   Widget _buildAverageBOSCard(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      width: screenWidth - 40,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFCDA6FF),
-            Color(0xFF2663FF),
+    final BloodOxygenSaturationViewModel viewModel = Get.find<BloodOxygenSaturationViewModel>();
+
+    return Obx(() {
+      double average = 0.0;
+
+      // 데이터가 존재하면 평균을 계산
+      if (viewModel.bloodOxygenData.isNotEmpty) {
+        double sum = 0.0;
+        int count = 0;
+
+        for (var data in viewModel.bloodOxygenData) {
+          if (data.value is double || data.value is int) {
+            sum += (data.value as num).toDouble();
+            count++;
+          }
+        }
+
+        // 데이터를 합산한 후 평균을 구함
+        if (count > 0) {
+          average = sum / count;
+        }
+      }
+
+      return Container(
+        width: screenWidth - 40,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFCDA6FF),
+              Color(0xFF2663FF),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(0, 10),
+            )
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: Offset(0, 10),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // 자식들을 왼쪽으로 정렬
-        children: <Widget>[
-          Text(
-            '한달 간 평균 포화도',
-            style: FontSystem.KR22B.copyWith(color: Colors.white),
-          ),
-          const SizedBox(height: 10), // 텍스트와 박스 사이의 간격
-          Container(
-            width: screenWidth - 80,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              color: const Color(0x1AFFFFFF), // 10% 투명도의 흰색
-              borderRadius: BorderRadius.circular(16),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '한달 간 평균 포화도',
+              style: FontSystem.KR22B.copyWith(color: Colors.white),
             ),
-            child: Center( // 텍스트를 컨테이너 내 중앙에 정렬
-              child: Text(
-                // Todo: 연동
-                '-', // 작은 컨테이너 안의 텍스트
-                style: FontSystem.KR35B.copyWith(color: Colors.white),
+            const SizedBox(height: 10),
+            Container(
+              width: screenWidth - 80,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0x1AFFFFFF),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Center(
+                child: Text(
+                  // 평균 산소포화도를 소수점 1자리까지 표시
+                  viewModel.bloodOxygenData.isNotEmpty
+                      ? average.toStringAsFixed(1) + '%'
+                      : '-',
+                  style: FontSystem.KR35B.copyWith(color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildBOSCard(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final BloodOxygenSaturationViewModel viewModel = Get.find<BloodOxygenSaturationViewModel>();
 
-    return Container(
-      width: screenWidth - 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: Offset(0, 10),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: <Widget>[
-              Image.asset('assets/images/bloodoxygensaturation.png', width: 25, height: 25),
-              SizedBox(width: 6,),
-              Text('한달 간 포화도 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
-            ],
-          ),
-          SizedBox(height: 8),
-          Center( // 중앙 정렬을 위해 Center 위젯 사용
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds),
-              child: Text(
-                '-', // Todo: 연동 필요
-                style: FontSystem.KR42B.copyWith(color: Colors.white),
+    return Obx(() {
+      return Container(
+        width: screenWidth - 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(0, 10),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: <Widget>[
+                Image.asset('assets/images/bloodoxygensaturation.png', width: 25, height: 25),
+                SizedBox(width: 6,),
+                Text('한달 간 포화도 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+              ],
+            ),
+            SizedBox(height: 8),
+            Center( // 중앙 정렬을 위해 Center 위젯 사용
+              child: ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFFA295FF), Color(0xFF1C336E)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: Text(
+                  viewModel.bloodOxygenData.isNotEmpty
+                      ? viewModel.bloodOxygenData.last.value.toString() + '%'
+                      : '-',
+                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildWarningCard(BuildContext context) {
