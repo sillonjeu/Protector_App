@@ -7,6 +7,7 @@ import '../../viewModels/root/root_viewmodel.dart';
 import '../base/base_screen.dart';
 import '../home/check_doctor_screen.dart';
 import '../home/home_screen.dart';
+import '../login/login_screen.dart';
 import 'custom_bottom_navigation_bar.dart';
 
 class RootScreen extends BaseScreen<RootViewModel> {
@@ -19,11 +20,10 @@ class RootScreen extends BaseScreen<RootViewModel> {
       () => IndexedStack(
         index: viewModel.selectedIndex,
         children: [
-          const HomeScreen(), // 0
-          const TelemedicineScreen(), // 1
-          const DoctorScreen(), // 2
-          WearOsConnectivityScreen(), // 3
-          CheckDoctorScreen(), // 4
+          const HomeScreen(), // 1
+          const TelemedicineScreen(), // 2
+          const DoctorScreen(), // 3
+          CheckDoctorScreen(), // 5
         ],
       ),
     );

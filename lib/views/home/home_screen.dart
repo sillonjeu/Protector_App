@@ -490,17 +490,6 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
     );
   }
 
-  // WearOs 연동 test
-  Widget _testConnectWearOS() {
-    return ElevatedButton(
-      onPressed: () {
-        // GetX의 네비게이션 기능을 사용하여 WearOsConnectivityScreen으로 이동
-        Get.to(() => WearOsConnectivityScreen());
-      },
-      child: const Text('Connect to Wear OS'),
-    );
-  }
-
   // 주치의 연동 확인 스크린
   Widget _testDoctorScreen() {
     return ElevatedButton(
