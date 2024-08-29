@@ -25,7 +25,7 @@ class BloodPressureScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
                 child: _buildTopContainer(context),
               ),
               Padding(
@@ -64,7 +64,7 @@ class BloodPressureScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 7.0),
               child: Text(
-                '혈압',
+                '분당 심장 박동 수',
                 style: FontSystem.KR22B.copyWith(color: Colors.black),
               ),
             ),
@@ -102,7 +102,7 @@ class BloodPressureScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '한달 간 평균 혈압',
+            '평균 분당 심장 박동 수',
             style: FontSystem.KR22B.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
@@ -150,7 +150,7 @@ class BloodPressureScreen extends StatelessWidget {
             children: <Widget>[
               Image.asset('assets/images/bloodpressure.png', width: 25, height: 25),
               SizedBox(width: 5,),
-              Text('한달 간 혈압 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+              Text('분당 심장 박동 수 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
           SizedBox(height: 16),
@@ -159,9 +159,11 @@ class BloodPressureScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegend(Colors.red, '수축기'),
+              _buildLegend(Colors.red, '최대'),
               SizedBox(width: 20),
-              _buildLegend(Colors.blue, '이완기'),
+              _buildLegend(Colors.green, '평균'),
+              SizedBox(width: 20),
+              _buildLegend(Colors.blue, '최소'),
             ],
           ),
         ],
@@ -173,17 +175,27 @@ class BloodPressureScreen extends StatelessWidget {
         .cast<Map<String, dynamic>>();
     List<FlSpot> systolicSpots = [];
     List<FlSpot> diastolicSpots = [];
+    List<FlSpot> averageSpots = [];
     double maxY = 0;
 
-    for (int i = 0; i < data.length; i++) {
-      systolicSpots.add(FlSpot(i.toDouble(), data[i]['systolic'].toDouble()));
-      diastolicSpots.add(FlSpot(i.toDouble(), data[i]['diastolic'].toDouble()));
-      maxY = maxY < data[i]['systolic'] ? data[i]['systolic'].toDouble() : maxY;
-    }
+    int totalSystolic = 0;
+    int totalDiastolic = 0;
 
-    // 마지막 데이터 포인트의 값을 가져옵니다.
-    int lastSystolic = data.last['systolic'];
-    int lastDiastolic = data.last['diastolic'];
+    for (int i = 0; i < data.length; i++) {
+      double systolic = data[i]['systolic'].toDouble();
+      double diastolic = data[i]['diastolic'].toDouble();
+
+      systolicSpots.add(FlSpot(i.toDouble(), systolic));
+      diastolicSpots.add(FlSpot(i.toDouble(), diastolic));
+
+      totalSystolic += systolic.toInt();
+      totalDiastolic += diastolic.toInt();
+
+      double average = (systolic + diastolic) / 2;
+      averageSpots.add(FlSpot(i.toDouble(), average));
+
+      maxY = maxY < systolic ? systolic : maxY;
+    }
 
     return AspectRatio(
       aspectRatio: 1.70,
@@ -211,17 +223,7 @@ class BloodPressureScreen extends StatelessWidget {
                   barWidth: 4,
                   isStrokeCapRound: true,
                   dotData: FlDotData(show: false),
-                  belowBarData: BarAreaData(
-                    show: true,
-                    color: Colors.red.withOpacity(0.1),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.red.withOpacity(0.4),
-                        Colors.red.withOpacity(0.1),
-                      ],
-                      stops: const [0.1, 1.0],
-                    ),
-                  ),
+                  belowBarData: BarAreaData(show: false), // 선 아래로 색 칠해지는 기능 제거
                 ),
                 LineChartBarData(
                   spots: diastolicSpots,
@@ -230,17 +232,16 @@ class BloodPressureScreen extends StatelessWidget {
                   barWidth: 4,
                   isStrokeCapRound: true,
                   dotData: FlDotData(show: false),
-                  belowBarData: BarAreaData(
-                    show: true,
-                    color: Colors.blue.withOpacity(0.1),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blue.withOpacity(0.4),
-                        Colors.blue.withOpacity(0.1),
-                      ],
-                      stops: const [0.1, 1.0],
-                    ),
-                  ),
+                  belowBarData: BarAreaData(show: false), // 선 아래로 색 칠해지는 기능 제거
+                ),
+                LineChartBarData(
+                  spots: averageSpots,
+                  isCurved: true,
+                  color: Colors.green.withOpacity(0.8), // 평균선 색상 추가
+                  barWidth: 4,
+                  isStrokeCapRound: true,
+                  dotData: FlDotData(show: false),
+                  belowBarData: BarAreaData(show: false), // 선 아래로 색 칠해지는 기능 제거
                 ),
               ],
               lineTouchData: LineTouchData(enabled: false),
@@ -249,14 +250,14 @@ class BloodPressureScreen extends StatelessWidget {
           ),
           Positioned(
             bottom: 10,
-            left: -60,
+            left: 0,
             right: 0,
             child: Center(
               child: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '$lastSystolic / $lastDiastolic ',
+                      text: '${data.last['systolic']} / ${data.last['diastolic']} ',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -264,7 +265,7 @@ class BloodPressureScreen extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: 'mmHg',
+                      text: 'BPM',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -292,7 +293,7 @@ class BloodPressureScreen extends StatelessWidget {
     }
     int avgSystolic = totalSystolic ~/ data.length;
     int avgDiastolic = totalDiastolic ~/ data.length;
-    return '$avgSystolic/$avgDiastolic';
+    return '$avgSystolic / $avgDiastolic BPM';
   }
 
   String _calculateDaysDifference() {
@@ -307,9 +308,8 @@ class BloodPressureScreen extends StatelessWidget {
     int firstSystolic = data.first['systolic'] as int;
     int lastSystolic = data.last['systolic'] as int;
     int difference = (lastSystolic - firstSystolic).abs();
-    return '$difference mmHg';
+    return '$difference BMP';
   }
-
 
   Widget _buildWarningCard(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -337,7 +337,7 @@ class BloodPressureScreen extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '오늘은 ${_calculateDaysDifference()} 일 전보다 ${_calculatePressureDifference()} 정도 높아요\n',
+                    text: '오늘은 ${_calculateDaysDifference()} 일 전보다 ${_calculatePressureDifference()} 정도 높아요.\n',
                     style: FontSystem.KR20B.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -368,5 +368,4 @@ class BloodPressureScreen extends StatelessWidget {
       ],
     );
   }
-
 }

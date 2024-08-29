@@ -24,7 +24,7 @@ class EcgHeartrateScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
                 child: _buildTopContainer(context),
               ),
               Padding(
@@ -40,7 +40,7 @@ class EcgHeartrateScreen extends StatelessWidget {
                 child: _buildTodayECGCard(context),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 60),
                 child: _buildWarningCard(context),
               ),
             ],
@@ -67,7 +67,7 @@ class EcgHeartrateScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 7.0),
               child: Text(
-                '심박수/심전도',
+                '심전도/심박수 변동성',
                 style: FontSystem.KR22B.copyWith(color: Colors.black),
               ),
             ),
@@ -109,7 +109,7 @@ class EcgHeartrateScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '한달 간 평균 심박수',
+            '평균 심전도',
             style: FontSystem.KR22B.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
@@ -122,7 +122,7 @@ class EcgHeartrateScreen extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '${average.toStringAsFixed(1)} bpm',
+                '${average.toStringAsFixed(1)} mV',
                 style: FontSystem.KR35B.copyWith(color: Colors.white),
               ),
             ),
@@ -159,7 +159,7 @@ class EcgHeartrateScreen extends StatelessWidget {
             children: <Widget>[
               Image.asset('assets/images/electrocardiogramheartrate.png', width: 25, height: 25),
               SizedBox(width: 5,),
-              Text('한달 간 심박수 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+              Text('심전도 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
           SizedBox(height: 16),
@@ -216,7 +216,7 @@ class EcgHeartrateScreen extends StatelessWidget {
                 end: Alignment.bottomRight,
               ).createShader(bounds),
               child: Text(
-                '${data.last['average'].toStringAsFixed(1)} bpm',
+                '${data.last['average'].toStringAsFixed(1)} mV',
                 style: FontSystem.KR42B.copyWith(color: Colors.white),
               ),
             ),
@@ -253,7 +253,7 @@ class EcgHeartrateScreen extends StatelessWidget {
             children: <Widget>[
               Image.asset('assets/images/electrocardiogramheartrate.png', width: 25, height: 25),
               SizedBox(width: 5,),
-              Text('오늘 측정한 심전도', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+              Text('심박수 변동성 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
           SizedBox(height: 16),
@@ -339,7 +339,7 @@ class EcgHeartrateScreen extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '오늘은 $daysDifference일 전보다 $difference bpm 정도 ${lastValue > firstValue ? '높아요' : '낮아요'}\n',
+                    text: '오늘은 $daysDifference일 전보다 $difference mV 정도 ${lastValue > firstValue ? '높아요' : '낮아요'}\n',
                     style: FontSystem.KR20B.copyWith(color: Colors.black),
                   ),
                   TextSpan(

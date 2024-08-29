@@ -24,7 +24,7 @@ class StressSleepScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
                 child: _buildTopContainer(context),
               ),
               Padding(
@@ -35,10 +35,10 @@ class StressSleepScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: _buildStressCard(context),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-                child: _buildTodaySleepCard(context),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+              //   child: _buildTodaySleepCard(context),
+              // ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: _buildWarningCard(context),
@@ -67,7 +67,7 @@ class StressSleepScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 7.0),
               child: Text(
-                '스트레스/수면',
+                '호흡률',
                 style: FontSystem.KR22B.copyWith(color: Colors.black),
               ),
             ),
@@ -110,7 +110,7 @@ class StressSleepScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '한달 간 평균 스트레스',
+            '평균 호흡률',
             style: FontSystem.KR22B.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
@@ -160,7 +160,7 @@ class StressSleepScreen extends StatelessWidget {
             children: <Widget>[
               Image.asset('assets/images/stresssleep.png', width: 25, height: 25),
               SizedBox(width: 6,),
-              Text('한달 간 스트레스 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+              Text('호흡률 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
           SizedBox(height: 16),
@@ -309,7 +309,7 @@ class StressSleepScreen extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '오늘은 $daysDifference일 전보다 $difference 정도 ${lastValue > firstValue ? '높아요' : '낮아요'}\n',
+                    text: '오늘은 $daysDifference일 전보다 $difference 정도 ${lastValue > firstValue ? '높아요.' : '낮아요.'}\n',
                     style: FontSystem.KR20B.copyWith(color: Colors.black),
                   ),
                   TextSpan(

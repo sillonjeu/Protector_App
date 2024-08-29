@@ -300,7 +300,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: Text('혈압', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+                  child: Text('분당 심장 박동수', style: FontSystem.KR16B.copyWith(color: Colors.black)),
                 ),
                 Image.asset('assets/images/bloodpressure.png', width: 25, height: 25),
               ],
@@ -314,8 +314,8 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
                 child: Text(
-                  '-', // Todo: 연동 필요
-                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                  '120/80', // Todo: 연동 필요
+                  style: FontSystem.KR32B.copyWith(color: Colors.white),
                 ),
               ),
             ),
@@ -356,7 +356,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: Text('스트레스/수면', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+                  child: Text('호흡률', style: FontSystem.KR16B.copyWith(color: Colors.black)),
                 ),
                 Image.asset('assets/images/stresssleep.png', width: 20, height: 20),
               ],
@@ -370,8 +370,8 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
                 child: Text(
-                  '-/-', // Todo: 연동 필요
-                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                  '60.47', // Todo: 연동 필요
+                  style: FontSystem.KR32B.copyWith(color: Colors.white),
                 ),
               ),
             ),
@@ -412,7 +412,7 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: Text('심전도/심박수', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+                  child: Text('심전도/심박수 변동성', style: FontSystem.KR13B.copyWith(color: Colors.black)),
                 ),
                 Image.asset('assets/images/electrocardiogramheartrate.png', width: 25, height: 25),
               ],
@@ -426,8 +426,8 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
                 child: Text(
-                  '-/-', // Todo: 연동 필요
-                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                  '115.5/92', // Todo: 연동 필요
+                  style: FontSystem.KR32B.copyWith(color: Colors.white),
                 ),
               ),
             ),
@@ -482,8 +482,8 @@ class HomeScreen extends BaseScreen<HomeViewModel> {
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
                 child: Text(
-                  '-', // Todo: 연동 필요
-                  style: FontSystem.KR42B.copyWith(color: Colors.white),
+                  '0.96', // Todo: 연동 필요
+                  style: FontSystem.KR32B.copyWith(color: Colors.white),
                 ),
               ),
             ),

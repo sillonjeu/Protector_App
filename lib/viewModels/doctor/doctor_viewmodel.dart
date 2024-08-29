@@ -18,7 +18,10 @@ class DoctorViewModel extends GetxController {
     try {
       // 서버 호출 대신 더미 데이터 생성
       var fetchedDoctors = List.generate(12, (index) => Doctor(
-          licenseNumber: 'licenseNumber$index'
+        licenseNumber: 'licenseNumber$index',
+        name: 'Dr. Smith $index',
+        hospital: 'General Hospital $index',
+        diagnosisCode: 'D00$index',
       ));
       doctorsList.assignAll(fetchedDoctors);
 

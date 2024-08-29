@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../utilities/font_system.dart';
@@ -24,7 +26,7 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
                 child: _buildTopContainer(context),
               ),
               Padding(
@@ -78,7 +80,7 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
     List<Map<String, dynamic>> data = (json.decode(DummyData.oxygenSaturationData) as List<dynamic>)
         .cast<Map<String, dynamic>>();
 
-    double average = data.map((item) => item['value'] as double).reduce((a, b) => a + b) / data.length;
+    double average = data.map((item) => item['o2Sat'] as double).reduce((a, b) => a + b) / data.length;
 
     return Container(
       width: screenWidth - 40,
@@ -106,7 +108,7 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '한달 간 평균 포화도',
+            '평균 포화도',
             style: FontSystem.KR22B.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
@@ -134,6 +136,22 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
     List<Map<String, dynamic>> data = (json.decode(DummyData.oxygenSaturationData) as List<dynamic>)
         .cast<Map<String, dynamic>>();
 
+    List<FlSpot> o2Spots = [];
+    List<FlSpot> atmSpots = [];
+    double maxY = 0;
+
+    for (int i = 0; i < data.length; i++) {
+      // null 값 처리
+      double o2Value = (data[i]['o2Sat'] ?? 0.0).toDouble();
+      double atmValue = (data[i]['atm'] ?? 0.0).toDouble();
+
+      o2Spots.add(FlSpot(i.toDouble(), o2Value));
+      atmSpots.add(FlSpot(i.toDouble(), atmValue / 100)); // 대기압을 그래프에 적절히 표현하기 위해 100으로 나누어 스케일을 맞춤
+
+      maxY = max(maxY, o2Value);
+      maxY = max(maxY, atmValue / 100);
+    }
+
     return Container(
       width: screenWidth - 60,
       decoration: BoxDecoration(
@@ -156,7 +174,7 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
             children: <Widget>[
               Image.asset('assets/images/bloodoxygensaturation.png', width: 25, height: 25),
               SizedBox(width: 6,),
-              Text('한달 간 포화도 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
+              Text('포화도 및 대기압 측정 그래프', style: FontSystem.KR16B.copyWith(color: Colors.black)),
             ],
           ),
           SizedBox(height: 16),
@@ -174,29 +192,26 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
                 borderData: FlBorderData(show: false),
                 minX: 0,
                 maxX: data.length.toDouble() - 1,
-                minY: 0.9,
-                maxY: 1.0,
+                minY: min(0.9, atmSpots.map((e) => e.y).reduce(min)), // 최소값을 산소포화도와 대기압 모두에서 고려
+                maxY: maxY + 0.1, // 최대값을 기준으로 그래프의 Y 축 범위 설정
                 lineBarsData: [
                   LineChartBarData(
-                    spots: data.asMap().entries.map((entry) =>
-                        FlSpot(entry.key.toDouble(), entry.value['value'])
-                    ).toList(),
+                    spots: o2Spots,
                     isCurved: true,
                     color: Colors.blue.withOpacity(0.8),
                     barWidth: 4,
                     isStrokeCapRound: true,
                     dotData: FlDotData(show: false),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: Colors.blue.withOpacity(0.1),
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.blue.withOpacity(0.4),
-                          Colors.blue.withOpacity(0.1),
-                        ],
-                        stops: const [0.1, 1.0],
-                      ),
-                    ),
+                    belowBarData: BarAreaData(show: false), // 선 아래로 색 칠해지는 기능 제거
+                  ),
+                  LineChartBarData(
+                    spots: atmSpots,
+                    isCurved: true,
+                    color: Colors.red.withOpacity(0.8),
+                    barWidth: 4,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(show: false),
+                    belowBarData: BarAreaData(show: false), // 선 아래로 색 칠해지는 기능 제거
                   ),
                 ],
                 lineTouchData: LineTouchData(enabled: false),
@@ -213,10 +228,19 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
                 end: Alignment.bottomRight,
               ).createShader(bounds),
               child: Text(
-                '${(data.last['value'] * 100).toStringAsFixed(1)}%',
+                '${(data.last['o2Sat'] * 100).toStringAsFixed(1)}%',
                 style: FontSystem.KR42B.copyWith(color: Colors.white),
               ),
             ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildLegend(Colors.blue, '평균 산소 포화도'),
+              SizedBox(width: 20),
+              _buildLegend(Colors.red, '대기압'),
+            ],
           ),
         ],
       ),
@@ -228,10 +252,13 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
     List<Map<String, dynamic>> data = (json.decode(DummyData.oxygenSaturationData) as List<dynamic>)
         .cast<Map<String, dynamic>>();
 
-    double lastValue = data.last['value'];
-    double firstValue = data.first['value'];
+    double lastO2Value = data.last['o2Sat'];
+    double firstO2Value = data.first['o2Sat'];
+    double lastAtmValue = data.last['atm'];
+    double firstAtmValue = data.first['atm'];
     int daysDifference = data.length - 1;
-    String difference = ((lastValue - firstValue) * 100).abs().toStringAsFixed(1);
+    String o2Difference = ((lastO2Value - firstO2Value) * 100).abs().toStringAsFixed(1);
+    String atmDifference = (lastAtmValue - firstAtmValue).abs().toStringAsFixed(3);
 
     return Container(
         width: screenWidth - 60,
@@ -256,7 +283,7 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '오늘은 $daysDifference일 전보다 $difference% 정도 ${lastValue > firstValue ? '높아요' : '낮아요'}\n',
+                    text: '오늘은 $daysDifference일 전보다\n산소 포화도가 $o2Difference% 정도 ${lastO2Value > firstO2Value ? '높아요' : '낮아요'}\n',
                     style: FontSystem.KR20B.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -268,6 +295,23 @@ class BloodOxygenSaturationScreen extends StatelessWidget {
             ),
           ),
         )
+    );
+  }
+
+  Widget _buildLegend(Color color, String label) {
+    return Row(
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+          ),
+        ),
+        SizedBox(width: 4),
+        Text(label, style: FontSystem.KR14R),
+      ],
     );
   }
 }
